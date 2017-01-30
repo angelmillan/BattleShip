@@ -1,0 +1,60 @@
+FUNCION moneda()
+...
+
+FUNCION dado()
+...
+
+FUNCIÓN COLOCAR_BARCOS(
+	tablero, // matriz
+	array_barcos) // barco-> tam, letra 
+INICIO
+
+	REPITE DESDE i=0 HASTA ARRAY_BARCOS.tamano-1
+	INICIO
+		VAR BARCO= ARRAY_BARCOS[i];
+		REPITE
+		INICIO
+			BOOLEAN libre = verdad
+			VAR direccion = MONEDA() // 0 horizontal o 1 vertical
+			SI (direccion==0) // => Horizontal
+			INICIO
+				x = DADO(0..tablero.TAM_X-1)
+				y = DADO(0..[tablero.TAM_Y-BARCO.tamaño-1] 
+				// si no le resto el tamaño del barco, me puedo salir del tablero
+				PARA (VAR cont_Y = 0; cont_Y<BARCO.tamaño-1; cont_Y++)
+				INICIO
+					SI (tablero[x,cont_Y+Y]!='a')
+						libre = falso;
+				FIN	
+				SI (libre) 
+				INICIO
+					PARA (VAR cont_Y = 0; cont_Y<BARCO.tamaño-1; cont_Y++)
+					INICIO
+						tablero[x,cont_Y+Y]=BARCO.letra;
+					FIN	
+				FIN			
+			FIN
+			SINO // dirección == 1 => Vertical
+			INICIO
+				x = DADO(0..tablero.TAM_X-BARCO.tam-1)
+				y = DADO(0..tablero.TAM_Y)
+				PARA (VAR cont_X = 0; cont_X<BARCO.tamaño-1; cont_X++)
+				INICIO
+					SI (tablero[cont_X+X,Y]!='a')
+						libre = falso;
+				FIN	
+				PARA (VAR cont_X = 0; cont_X<BARCO.tamaño-1; cont_X++)
+				INICIO
+					tablero[cont_X+x,y] = BARCO.letra;
+				FIN
+			FIN
+		FIN
+		MIENTRAS libre!=verdad
+	FIN	
+
+FIN
+
+
+
+
+
