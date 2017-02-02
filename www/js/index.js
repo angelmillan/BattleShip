@@ -138,7 +138,8 @@ function moneda(){
 */
 function colocarBarcos(matriz){
     //Compruebo que haya más de ocho filas y que la primera fila(igual a las demás) sean más de 8 columnas.
-    for (var i=0; i<barcos.length;i++){
+    var fila, col, i, j;
+    for (i=0; i<barcos.length;i++){
         var barco = barcos[i];
         var libre;
         do { 
@@ -147,28 +148,28 @@ function colocarBarcos(matriz){
             libre=true;
             var direccion = moneda();
             if (direccion===0) { // horizontal 
-                var fila = dado(matriz.length);
-                var col = dado(matriz[fila].length-barco.tam);
-                for (var j=0; j<barco.tam;j++){
+                fila = dado(matriz.length);
+                col = dado(matriz[fila].length-barco.tam);
+                for (j=0; j<barco.tam;j++){
                     if(matriz[fila][j+col]!='a') {
                         libre=false;
                     }
                 }
                 if (libre) {
-                   for (var j=0; j<barco.tam;j++){
+                   for (j=0; j<barco.tam;j++){
                         matriz[fila][j+col]=barco.letra;
                    }
                 }
             } else { // vertical
-                var fila = dado(matriz.length-barco.tam);
-                var col = dado(matriz[fila].length);
-                for (var j=0; j<barco.tam;j++){
+                fila = dado(matriz.length-barco.tam);
+                col = dado(matriz[fila].length);
+                for (j=0; j<barco.tam;j++){
                     if(matriz[j+fila][col]!='a') {
                         libre=false;
                     }
                 }
                 if (libre) {
-                   for (var j=0; j<barco.tam;j++){
+                   for (j=0; j<barco.tam;j++){
                         matriz[j+fila][col]=barco.letra;
                    }
                 }
@@ -178,7 +179,18 @@ function colocarBarcos(matriz){
     
 }
 
-    
+function generarTablero(){
+    var html = '<TABLE>';
+    for (var i = 0; i<filas; i++){
+        html = html + '<TR>';
+        for (var j = 0; j < columnas); j++{
+            html += '<TD id="celda_'+i+'_'+j+'" class="vacio" onclick=disparo("celda_'+i+'_'+j+'") >A</TD>';
+        }
+        html += '</TR>'
+    }
+    html += '</TABLE>'
+    document.getElementById("partida").innerHTML = html;
+}    
 /**
 
 */
@@ -190,6 +202,7 @@ function crearPartida(){
     colocarBarcos(tablero);
     // volcar la matriz a consola
     matriz2console(tablero);
+    generarTablero();
 }
 
 
