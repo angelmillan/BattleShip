@@ -1,0 +1,59 @@
+.vacio {
+    background-image: url("../img/nubes.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    width: 3em;
+    height: 3em;  
+}
+
+.agua {
+    background-image: url(../img/vacio.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    width: 3em;
+    height: 3em;
+}
+
+.portaaviones {
+    background-image: url(../img/Railgun_Battleship.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    width: 3em;
+    height: 3em;
+    
+}
+
+.fragata {
+   background-image: url(../img/Spec_Ops_Man_O'_War_Battleship.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    width: 3em;
+    height: 3em; 
+ 
+    
+}
+
+.destructor {
+    background-image: url(../img/Spec_Ops_Sea_Hive_Carrier.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    width: 3em;
+    height: 3em;  
+}
+
+.buque {
+    background-image: url(../img/Elite_Assault_Battleship2.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    width: 3em;
+    height: 3em;
+}
+
+.submarino {
+    background-image: url(../img/submarino.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    width: 3em;
+    height: 3em; 
+    
+}

@@ -183,13 +183,30 @@ function generarTablero(){
     var html = '<TABLE>';
     for (var i = 0; i<filas; i++){
         html = html + '<TR>';
-        for (var j = 0; j < columnas); j++{
-            html += '<TD id="celda_'+i+'_'+j+'" class="vacio" onclick=disparo("celda_'+i+'_'+j+'") >A</TD>';
+        for (var j = 0; j < columnas ; j++){
+            html += '<TD id="celda_'+i+'_'+j+'" class="vacio" onclick=disparo("celda_'+i+'_'+j+' , '+i+','+j+') ></TD>';
         }
-        html += '</TR>'
+        html += '</TR>';
     }
-    html += '</TABLE>'
+    html += '</TABLE>';
     document.getElementById("partida").innerHTML = html;
+    //
+
+function generarTableroJQ(){
+    var tabla = $("<table/>");
+        for (var i = 0; i<filas; i++){
+            var tr = $("tr/>");
+            for (var j = 0; j<columnas; j++){
+                var td= $("<td id='celda_"+i+"_"+j+"'/>");
+                td.bind("onclick",disparo);
+                td.addClass("vacio");
+                tr.append(td);
+            }
+            tabla.append(tr);
+        }
+        $("#partida").append(tabla);
+    }
+    
 }    
 /**
 
@@ -205,6 +222,26 @@ function crearPartida(){
     generarTablero();
 }
 
+function disparo(celda,i,j){
+    //alert (celda);
+    //tablero[i][j]= tablero[i][j].toUpperCase;
+    
+    switch (tablero[i][j]){
+        case 'a':
+            tablero[i][j]='A';
+            $("#"+celda).removeClass('vacio');
+            $("#"+celda).addClass('agua');                        
+        break;
+        case 'b':
+            $("#"+celda).removeClass('vacio');
+            $("#"+celda).addClass('buque');                        
+        break;
+            
+    default:
+            
+    }
+    
+}
 
 
     
