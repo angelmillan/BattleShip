@@ -7,8 +7,8 @@ var barcos = null;
 // variable para almacenar el tablero de juego
 // la matriz del tablero
 var tablero = null;
-var filas = 8;
-var columnas = 8;
+var filas = 10;
+var columnas = 10;
 
 /**
  * Esta función responde al evento "ready" y carga la 
@@ -34,10 +34,10 @@ $(document).ready(function(){
         columnas = parseInt(localStorage.getItem("columnas"));
         
         if (isNaN(filas) || isNaN(columnas)) {
-            filas = 8;
-            columnas = 8;
-            localStorage.setItem("filas",8);
-            localStorage.setItem("columnas",8);
+            filas = 10;
+            columnas = 10;
+            localStorage.setItem("filas",10);
+            localStorage.setItem("columnas",10);
         }
         
     } else { 
@@ -184,7 +184,7 @@ function generarTablero(){
     for (var i = 0; i<filas; i++){
         html = html + '<TR>';
         for (var j = 0; j < columnas ; j++){
-            html += '<TD id="celda_'+i+'_'+j+'" class="vacio" onclick=disparo("celda_'+i+'_'+j+' , '+i+','+j+') ></TD>';
+            html += '<TD id="celda_'+i+'_'+j+'" class="vacio" onclick=disparo("celda_'+i+'_'+j+'",'+i+','+j+') ></TD>';
         }
         html += '</TR>';
     }
@@ -195,7 +195,7 @@ function generarTablero(){
 function generarTableroJQ(){
     var tabla = $("<table/>");
         for (var i = 0; i<filas; i++){
-            var tr = $("tr/>");
+            var tr = $("<tr/>");
             for (var j = 0; j<columnas; j++){
                 var td= $("<td id='celda_"+i+"_"+j+"'/>");
                 td.bind("onclick",disparo);
@@ -231,16 +231,37 @@ function disparo(celda,i,j){
             tablero[i][j]='A';
             $("#"+celda).removeClass('vacio');
             $("#"+celda).addClass('agua');                        
-        break;
+            break;
         case 'b':
+            tablero[i][j]='B';
             $("#"+celda).removeClass('vacio');
             $("#"+celda).addClass('buque');                        
-        break;
-            
-    default:
-            
+            break;
+        case 'p':
+            tablero[i][j] = 'P';
+            $("#"+celda).removeClass('vacio');
+            $("#"+celda).addClass('portaaviones');
+            break;
+        case 'f':
+            tablero[i][j] = 'F';
+            $("#"+celda).removeClass('vacio');
+            $("#"+celda).addClass('fragata');
+            break;
+        case 's':
+            tablero[i][j] = 'S';
+            $("#"+celda).removeClass('vacio');
+            $("#"+celda).addClass('submarino');
+            break;
+        case 'd':
+            tablero[i][j] = 'D';
+            $("#"+celda).removeClass('vacio');
+            $("#"+celda).addClass('destructor');
+            break;    
+        default:
+            break; 
+        
     }
-    
+
 }
 
 
