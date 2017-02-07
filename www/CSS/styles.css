@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 #partida{
     background-image: url(../img/fondo.png);
     background-repeat: repeat;
@@ -47,7 +47,7 @@
 }
 
 .buque {
-    background-image: url(../img/Elite_Assault_Battleship2.png);
+    background-image: url(../img/Elite_Assault_Battleship.png);
     background-size: 100% 100%;
     background-repeat: no-repeat;
     width: 3em;
@@ -61,5 +61,4 @@
     width: 3em;
     height: 3em;   
 }
-=======
->>>>>>> parent of 9c29236... lunes 8
+
