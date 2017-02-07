@@ -183,13 +183,19 @@ function generarTablero(){
     var html = '<TABLE>';
     for (var i = 0; i<filas; i++){
         html = html + '<TR>';
+<<<<<<< HEAD
         for (var j = 0; j < columnas ; j++){
             html += '<TD id="celda_'+i+'_'+j+'" class="vacio" onclick=disparo("celda_'+i+'_'+j+'",'+i+','+j+') ></TD>';
+=======
+        for (var j = 0; j < columnas); j++{
+            html += '<TD id="celda_'+i+'_'+j+'" class="vacio" onclick=disparo("celda_'+i+'_'+j+'") >A</TD>';
+>>>>>>> parent of 9c29236... lunes 8
         }
-        html += '</TR>';
+        html += '</TR>'
     }
-    html += '</TABLE>';
+    html += '</TABLE>'
     document.getElementById("partida").innerHTML = html;
+<<<<<<< HEAD
     //
 
 function generarTableroJQ(){
@@ -207,6 +213,8 @@ function generarTableroJQ(){
         $("#partida").append(tabla);
     }
     
+=======
+>>>>>>> parent of 9c29236... lunes 8
 }    
 /**
 
@@ -222,6 +230,7 @@ function crearPartida(){
     generarTablero();
 }
 
+<<<<<<< HEAD
 function disparo(celda,i,j){
     //alert (celda);
     //tablero[i][j]= tablero[i][j].toUpperCase;
@@ -263,6 +272,8 @@ function disparo(celda,i,j){
     }
 
 }
+=======
+>>>>>>> parent of 9c29236... lunes 8
 
 
     
