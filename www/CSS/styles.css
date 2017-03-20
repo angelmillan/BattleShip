@@ -1,3 +1,22 @@
+h1{
+    margin: 1px;
+/*    padding: 1px;*/
+}
+
+table
+{ 
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.informacion {
+    font-size: 1em;
+    font-style: italic;
+    text-decoration-color: aqua;
+    text-align: center;
+    background-color: azure;
+    border: solid blue;
+}
 
 #partida{
     background-image: url(../img/fondo.png);
@@ -7,7 +26,8 @@
 }
 
 .vacio {
-    background-image: url(../img/vacio.png);
+    background-image: url(../img/radar.gif);
+    //background-image: url(../img/vacio.png);
     background-size: 100% 100%;
     background-repeat: no-repeat;
     width: 3em;

@@ -1,14 +1,17 @@
 /*jslint browser:true, devel:true */
 /*global $:false */
-
 // JSON con los barcos
 var barcos = null;
-
 // variable para almacenar el tablero de juego
 // la matriz del tablero
 var tablero = null;
 var filas = 10;
 var columnas = 10;
+var segundos = 0;
+var myTimer = null;
+var disparos = 0;
+var aciertos = 0;
+
 
 /**
  * Esta función responde al evento "ready" y carga la 
@@ -17,6 +20,10 @@ var columnas = 10;
 */
 $(document).ready(function(){
     //¿hay localStorage disponible? (almacenamos la conf. ahí)
+cargaConfiguracion();  
+});
+    
+function cargaConfiguracion(){  
     if (typeof(Storage) !== "undefined") {
         barcos = JSON.parse(localStorage.getItem("barcos"));
         
@@ -27,7 +34,8 @@ $(document).ready(function(){
                 {tam:3, letra:'s', nombre:'submarino'},
                 {tam:4, letra:'d', nombre:'destructor'},
                 {tam:5, letra:'p', nombre:'portaaviones'},
-            ];            localStorage.setItem("barcos",JSON.stringify(barcos));
+            ];            
+            localStorage.setItem("barcos",JSON.stringify(barcos));
         }
         
         filas = parseInt(localStorage.getItem("filas"));
@@ -40,12 +48,25 @@ $(document).ready(function(){
             localStorage.setItem("columnas",10);
         }
         
+        segundos = parseInt(localStorage.getItem("segundos"));
+        
+        if (isNaN(segundos)) {
+            segundos = 30;
+            localStorage.setItem("segundos",30);
+        }
+        
+        disparos = parseInt(localStorage.getItem("disparos"));
+        
+        if (isNaN(disparos)) {
+            disparos = 50;
+            localStorage.setItem("disparos",50);
+        }
     } else { 
         // NO hay localStorage, no podemos guardar 
         // conf. ni información de las partidas (puntuaciones)
         console.log("No tenemos LocalStorage");
     }
-});
+}
 
 /**
     Esta función crea una matriz (en JS es un 
@@ -180,58 +201,81 @@ function colocarBarcos(matriz){
 }
 
 function generarTablero(){
-    var html = '<TABLE>';
+    var html = '<table id=tabla>';
     for (var i = 0; i<filas; i++){
-        html = html + '<TR>';
+        html = html + '<tr>';
         for (var j = 0; j < columnas ; j++){
-            html += '<TD id="celda_'+i+'_'+j+'" class="vacio" onclick=disparo("celda_'+i+'_'+j+'",'+i+','+j+')></TD>';
+            html += '<td id="celda_'+i+'_'+j+'" class="vacio" onclick=disparo("celda_'+i+'_'+j+'",'+i+','+j+')></td>';
         }
-        html += '</TR>';
+        html += '</tr>';
     }
-    html += '</TABLE>';
-    document.getElementById("partida").innerHTML = html;
+    html += '</table>';
+    document.getElementById("tablero").innerHTML = html;
     //
+}
 
-function generarTableroJQ(){
+/** function generarTablerojQ(){
+    $("#tablero").empty();
     var tabla = $("<table/>");
         for (var i = 0; i<filas; i++){
-            var tr = $("<tr/>");
+            var fila = $("<tr/>");
             for (var j = 0; j<columnas; j++){
-                var td= $("<td id='celda_"+i+"_"+j+"'/>");
-                td.bind("onclick",disparo);
-                td.addClass("vacio");
-                tr.append(td);
+                var celda= $('<td id="celda_'+i+'_'+j+'"  onclick=disparo("celda_'+i+'_'+j+'",'+i+','+j+') > </td>');
+                
+                celda.addClass("vacio");
+                fila.append(celda);
             }
-            tabla.append(tr);
+            tabla.append(fila);
         }
-        $("#partida").append(tabla);
-    }
+        $("tablero").append(tabla);
+    } */
     
-}    
-/**
+    
 
-*/
 function crearPartida(){
+    aciertos = 0;
+    cargaConfiguracion();
+    clearInterval(myTimer);
     // crear una matriz de fil x col
     tablero = crearMatriz(filas,columnas);
     // rellenar la matriz "a"
     inicializaMatriz('a',tablero);
     colocarBarcos(tablero);
     // volcar la matriz a consola
-    matriz2console(tablero);
     generarTablero();
+    // ARRANCAMOS EL TIMER!!! -> con setInterval()
+    myTimer = setInterval(callbackTimer,1000);
+    // ACTUALIZAMOS LAS CAJAS DEL TIEMPO Y DISPAROS
+    $("#disparos").html(disparos+" misiles");
+    $("#tiempo").html(segundos+" seg.");
+    // volcar la matriz a consola
+    matriz2console(tablero);
 }
 
+function callbackTimer(){
+    // actualizar el tiempo que queda
+    segundos--;
+    // si el tiempo es <= 0 para el timer clearInterval() y acaba la partida
+    if(segundos<=0) {
+        terminarPartida(); // <- Ahora paro el interval en terminarPartida()
+    }
+    $("#tiempo").html(segundos+" seg.");
+}
 
 function disparo(celda,i,j){
     //alert (celda);
     //tablero[i][j]= tablero[i][j].toUpperCase;
+        // alert("Has disparado en la caja: "+celda+ "hay que mirar el tablero en la posición"+i+","+j);
+    if (disparos>0 && segundos>0) {
+        disparos--;
+        aciertos++;
     
-    switch (tablero[i][j]){
+        switch (tablero[i][j]){
         case 'a':
             tablero[i][j]='A';
             $("#"+celda).removeClass('vacio');
-            $("#"+celda).addClass('agua');                        
+            $("#"+celda).addClass('agua');
+            aciertos--;
             break;
         case 'b':
             tablero[i][j]='B';
@@ -259,12 +303,77 @@ function disparo(celda,i,j){
             $("#"+celda).addClass('destructor');
             break;    
         default:
+            disparos++;
+            aciertos--;
             break; 
-        
-    }
-
+        }
+    
+        $("#disparos").html(disparos+" misiles");
+        $("#aciertos").html(aciertos+" aciertos");
+    } else {
+        // FINALIZAR PARTIDA Y PEDIR INFO PARA LOS MARCADORES (FORMULARIO)
+        console.log("partida terminada.");
+        terminarPartida();
+        }
 }
 
+
+function terminarPartida(){
+    // CALCULAR PUNTOS
+    $("#puntos").val(aciertos*disparos*100+segundos*500);
+    $("#segundos").val(segundos);
+    // PARAR EL TIMER (porque no me queden disparos
+    // o hayamos hundido todos los barcos)
+    clearInterval(myTimer);
+    
+    // Mostrar el diálogo para guardar los puntos
+    $.afui.clearHistory();
+    $.afui.loadContent("#formulario",false,false,"up");
+}
+
+function guardarPuntos(){
+    // Cargamos los marcadores de localStorage
+    var marcadores = JSON.parse(localStorage.getItem("marcadores"));
+    // Si no existe, lo inicializamos.
+    if (marcadores === null) {
+        marcadores = [];        
+    }
+    
+    // Ejemplo de cómo leer de un formulario a JSON
+    var puntuacion = {
+        "nombre": $("#nombre").val(),
+        "puntos": $("#puntos").val(),
+        "tiempo": $("#segundos").val()
+    };
+    // Introducimos la puntuación en el array.
+    marcadores.push(puntuacion);
+    
+    localStorage.setItem("marcadores",JSON.stringify(marcadores));
+    
+    mostrarPuntos();
+}
+
+function mostrarPuntos(){
+    $("#puntuaciones").empty();
+    // Cargamos los marcadores de localStorage
+    var marcadores = JSON.parse(localStorage.getItem("marcadores"));
+    // Si no existe, no hacemos nada.
+    var tablaPuntos = $("<table border='1px solid black'/>");
+    tablaPuntos.append("<tr><th>nombre</th><th>puntos</th><th>tiempo</th></tr>");
+    if (marcadores !== null) {
+        for (var jugador in marcadores) {
+            var tr = $("<tr />");
+            tr.append("<td>"+marcadores[jugador].nombre+"</td>");
+            tr.append("<td>"+marcadores[jugador].puntos+"</td>");
+            tr.append("<td>"+marcadores[jugador].tiempo+"</td>");
+            tablaPuntos.append(tr);
+        }
+    }
+    $("#puntuaciones").append(tablaPuntos);
+    
+    $.afui.clearHistory();
+    $.afui.loadContent("#puntuaciones",false,false,"up");
+}
 
 
     
